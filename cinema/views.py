@@ -16,9 +16,8 @@ def movies_list(request: Request) -> Response:
         return Response(serializer.data, status=status.HTTP_200_OK)
     if request.method == "POST":
         serializer = MovieSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -30,9 +29,7 @@ def movie_detail(request: Request, pk: int) -> Response:
         return Response(serializer.data, status=status.HTTP_200_OK)
     elif request.method == "PUT":
         serializer = MovieSerializer(movie, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
+        serializer.is_valid(raise_exception=True)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
         movie.delete()
